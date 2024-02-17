@@ -1,5 +1,9 @@
-class Parsing_error(Exception):
-    pass
+from Lexer.lexer import Lexer
+from Token.toke import TokenType
+from Token.parsing_error import Parsing_error
+from Token.lexical_error import Lexical_error
+from AST.ast import AST
+from AST.bin_op import BinOp
 
 
 class Parser:
@@ -13,7 +17,7 @@ class Parser:
     def eat(self, token_type):
         """
         Порівнюємо поточний токен з очікуваним токеном і, якщо вони збігаються,
-        'поглинаємо' його й переходимо до наступного токена.
+        'поглинаємо' його і переходимо до наступного токена.
         """
         if self.current_token.type == token_type:
             self.current_token = self.lexer.get_next_token()
@@ -22,9 +26,27 @@ class Parser:
 
     def term(self):
         """Парсер для 'term' правил граматики. У нашому випадку - це цілі числа."""
+        node = self.factor()
+
+        while self.current_token.type in (TokenType.MUL,):
+            token = self.current_token
+            if token.type == TokenType.MUL:
+                self.eat(TokenType.MUL)
+
+            node = BinOp(left=node, op=token, right=self.factor())
+        return node
+
+    def factor(self):
+        """Парсер для 'factor' правил граматики."""
         token = self.current_token
-        self.eat(TokenType.INTEGER)
-        return Num(token)
+        if token.type == TokenType.INTEGER:
+            self.eat(TokenType.INTEGER)
+            return Num(token)
+        elif token.type == TokenType.LPAREN:
+            self.eat(TokenType.LPAREN)
+            node = self.expr()
+            self.eat(TokenType.RPAREN)
+            return node
 
     def expr(self):
         """Парсер для арифметичних виразів."""

@@ -1,6 +1,8 @@
 class Token_type:
-    INTEGER = 'INTEGER'
-    PLUS = 'PLUS'
-    MINUS = 'MINUS'
-    EOF = 'EOF'  # Означає кінець вхідного файлу/рядка
-
+    INTEGER = "INTEGER"
+    PLUS = "PLUS"
+    MINUS = "MINUS"
+    LPAREN = "LPAREN"
+    RPAREN = "RPAREN"
+    MUL = "MUL"
+    EOF = "EOF"  # Означає кінець вхідного рядка

@@ -1,3 +1,8 @@
+from Token.toke import Token, TokenType
+from Token.lexical_error import LexicalError
+from Token.parsing_error import ParsingError
+
+
 class Lexer:
     def __init__(self, text):
         self.text = text
@@ -43,6 +48,18 @@ class Lexer:
             if self.current_char == "-":
                 self.advance()
                 return Token(TokenType.MINUS, "-")
+
+            if self.current_char == "*":
+                self.advance()
+                return Token(TokenType.MUL, "*")
+
+            if self.current_char == "(":
+                self.advance()
+                return Token(TokenType.LPAREN, "(")
+
+            if self.current_char == ")":
+                self.advance()
+                return Token(TokenType.RPAREN, ")")
 
             raise LexicalError("Помилка лексичного аналізу")
 

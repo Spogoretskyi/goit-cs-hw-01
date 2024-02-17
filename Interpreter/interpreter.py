@@ -1,3 +1,10 @@
+from Lexer.lexer import Lexer
+from Parser.parser import Parser
+from Token.toke import TokenType
+from AST.ast import AST
+from AST.bin_op import BinOp
+from AST.num import Num
+
 class Interpreter:
     def __init__(self, parser):
         self.parser = parser
@@ -7,13 +14,14 @@ class Interpreter:
             return self.visit(node.left) + self.visit(node.right)
         elif node.op.type == TokenType.MINUS:
             return self.visit(node.left) - self.visit(node.right)
+        elif node.op.type == TokenType.MUL:
+            return self.visit(node.left) * self.visit(node.right)
 
     def visit_Num(self, node):
         return node.value
 
     def interpret(self):
         tree = self.parser.expr()
-        print_ast(tree)
         return self.visit(tree)
 
     def visit(self, node):
