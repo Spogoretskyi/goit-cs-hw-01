@@ -1,21 +1,22 @@
-from Lexer.lexer import Lexer
-from Parser.parser import Parser
-from Token.toke import TokenType
-from AST.ast import AST
-from AST.bin_op import BinOp
-from AST.num import Num
+from Lexer.lexer import Lexer, Lexical_error
+from Parser.parser import Parser, Parsing_error
+from Token.token import Token, Token_type
+from AST.ast import AST, Bin_op, Num
+
 
 class Interpreter:
     def __init__(self, parser):
         self.parser = parser
 
-    def visit_BinOp(self, node):
-        if node.op.type == TokenType.PLUS:
+    def visit_Bin_op(self, node):
+        if node.op.type == Token_type.PLUS:
             return self.visit(node.left) + self.visit(node.right)
-        elif node.op.type == TokenType.MINUS:
+        elif node.op.type == Token_type.MINUS:
             return self.visit(node.left) - self.visit(node.right)
-        elif node.op.type == TokenType.MUL:
+        elif node.op.type == Token_type.MUL:
             return self.visit(node.left) * self.visit(node.right)
+        elif node.op.type == Token_type.DIV:
+            return self.visit(node.left) / self.visit(node.right)
 
     def visit_Num(self, node):
         return node.value

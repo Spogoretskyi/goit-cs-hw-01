@@ -1,6 +1,4 @@
-from Token.toke import Token, TokenType
-from Token.lexical_error import LexicalError
-from Token.parsing_error import ParsingError
+from Token.token import Token, Token_type, Parsing_error
 
 
 class Lexer:
@@ -39,28 +37,36 @@ class Lexer:
                 continue
 
             if self.current_char.isdigit():
-                return Token(TokenType.INTEGER, self.integer())
+                return Token(Token_type.INTEGER, self.integer())
 
             if self.current_char == "+":
                 self.advance()
-                return Token(TokenType.PLUS, "+")
+                return Token(Token_type.PLUS, "+")
 
             if self.current_char == "-":
                 self.advance()
-                return Token(TokenType.MINUS, "-")
+                return Token(Token_type.MINUS, "-")
 
             if self.current_char == "*":
                 self.advance()
-                return Token(TokenType.MUL, "*")
+                return Token(Token_type.MUL, "*")
+
+            if self.current_char == "/":
+                self.advance()
+                return Token(Token_type.DIV, "/")
 
             if self.current_char == "(":
                 self.advance()
-                return Token(TokenType.LPAREN, "(")
+                return Token(Token_type.LPAREN, "(")
 
             if self.current_char == ")":
                 self.advance()
-                return Token(TokenType.RPAREN, ")")
+                return Token(Token_type.RPAREN, ")")
 
-            raise LexicalError("Помилка лексичного аналізу")
+            raise Lexical_error("Помилка лексичного аналізу")
 
-        return Token(TokenType.EOF, None)
+        return Token(Token_type.EOF, None)
+
+
+class Lexical_error(Exception):
+    pass
